@@ -1,0 +1,22 @@
+[
+	{
+		"key": "config/defaults,docker/",
+		"flags": 0,
+		"value": ""
+	},
+	{
+		"key": "config/defaults,docker/application.yml",
+		"flags": 0,
+		"value": "c3ByaW5nOgogcmFiYml0bXE6CiAgaG9zdDogcmFiYml0bXEtc2hvcC1hcHAKIGRhdGE6CiAgcmVkaXM6CiAgIGhvc3Q6IHJlZGlzLXNob3AtYXBwCiBjbG91ZDoKICBjb25zdWw6CiAgIGRpc2NvdmVyeToKICAgIGluc3RhbmNlLWlkOiAke3NwcmluZy5hcHBsaWNhdGlvbi5uYW1lfS0ke3JhbmRvbS5pbnQoMTAwMCl9"
+	},
+	{
+		"key": "config/defaults/",
+		"flags": 0,
+		"value": ""
+	},
+	{
+		"key": "config/defaults/application.yml",
+		"flags": 0,
+		"value": "bG9nZ2luZzoKIGxldmVsOgogIG9yZy5zcHJpbmdmcmFtZXdvcmsuY29yZS5lbnY6IGRlYnVn"
+	}
+]

@@ -1,0 +1,55 @@
+server:
+  port: 80
+
+spring:
+  application:
+    name: gateway
+  config:
+    import: "optional:consul:"
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      enabled: true
+      discovery:
+        # Get only service that are passing health check
+        query-passing: true
+      config:
+        default-context: defaults
+        format: yaml
+        prefixes: config
+        data-key: application.yml
+
+    gateway:
+      routes:
+        - id: order-test
+          uri: lb://order-app-test/
+          predicates:
+            - Path=/hello
+        - id: site-shop
+          uri: lb://site-shop/
+          predicates:
+            - Path=/**, /
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET, POST
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "https://www.paypal.com"
+              - "https://www.sandbox.paypal.com"
+            allowedHeaders:
+              - '*'
+            allowedMethods:
+              - 'GET'
+              - 'POST'
+              - 'OPTIONS'
+logging:
+  level:
+#    org.springframework.cloud.gateway.handler.predicate: trace
+    org.springframework.amqp.rabbit.connection.CachingConnectionFactory: warn

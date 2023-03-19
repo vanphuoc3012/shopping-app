@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('Checkout Result', 'none')}" />
+<body>
+<div class="container-fluid">
+    <div th:replace="~{navigation :: header_menu}"></div>
+    <div th:replace="~{navigation :: search_nav}"></div>
+    <th:block th:unless="${error}">
+        <div class="text-center">
+            <h2 class="text-success" th:text="${message}"></h2>
+            <h5>A confirm email has been sent to you.</h5>
+            <h5>Kindly check your email for the details</h5>
+            <h5><a href="#">Click here </a> to manage and track your order.</h5>
+        </div>
+    </th:block>
+
+    <th:block th:if="${error}">
+        <div class="text-center">
+            <h2 class="text-danger" th:text="${message}"></h2>
+        </div>
+    </th:block>
+
+
+
+    <div th:replace="~{fragments :: modal_dialog}"></div>
+    <div th:replace="~{navigation :: footer_menu}"></div>
+</div>
+
+</body>
+</html>

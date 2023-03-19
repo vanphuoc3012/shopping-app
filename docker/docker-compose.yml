@@ -1,0 +1,91 @@
+version: "3"
+
+networks:
+  shop-networks:
+    driver: bridge
+
+services:
+  shop-logs:
+    image: shop-logs:0.0.1-SNAPSHOT
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-shop-app
+    depends_on:
+      - consul-shop-app
+      - consul-shop-importer
+    networks:
+      - shop-networks
+
+  shop-gateway:
+    image: shop-gateway:latest
+    ports:
+      - '80:80'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-shop-app
+    depends_on:
+      - consul-shop-app
+      - consul-shop-importer
+      - shop-logs
+    networks:
+      - shop-networks
+
+  shop-email:
+    image: emailservice:0.0.1-SNAPSHOT
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-shop-app
+    depends_on:
+      - consul-shop-app
+      - consul-shop-importer
+      - shop-logs
+    networks:
+      - shop-networks
+
+  shop-app:
+    image: site-shop:1.0
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul-shop-app
+    depends_on:
+      - consul-shop-importer
+      - consul-shop-app
+      - shop-logs
+    networks:
+      - shop-networks
+
+  consul-shop-importer:
+    image: consul-shop-importer:1.0
+    container_name: consul-shop-importer
+    depends_on:
+      - consul-shop-app
+    networks:
+      - shop-networks
+
+  consul-shop-app:
+    image: consul:latest
+    container_name: consul-shop-app
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    command: 'agent -dev -node=consul-shop-app -client=0.0.0.0 -log-level=INFO'
+    networks:
+      - shop-networks
+
+  rabbitmq-shop-app:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-shop-app
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - shop-networks
+
+  redis-shop-app:
+    image: redis/redis-stack:latest
+    container_name: redis-shop-app
+    ports:
+      - '6379:6379'
+    networks:
+      - shop-networks
+
